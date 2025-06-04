@@ -53,6 +53,7 @@ return [
         "server"=>[
             'flash_ver'=>       'flash_129',
         ],
+        "admin_secret" => "changeme",
         "constants"=>[
             //Init
             "init_game_currency"=>1,
