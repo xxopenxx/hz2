@@ -1056,7 +1056,8 @@ CREATE TABLE `worldboss_reward` (
   `xp` int(11) NOT NULL DEFAULT 0,
   `item_id` int(11) NOT NULL DEFAULT 0,
   `sidekick_item_id` int(11) NOT NULL DEFAULT 0,
-  `rewards` varchar(255) NOT NULL
+  `rewards` varchar(255) NOT NULL,
+  `claimed` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -1296,7 +1297,7 @@ ALTER TABLE `worldboss_attack`
 --
 ALTER TABLE `worldboss_reward`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `event_character` (`worldboss_event_id`,`character_id`);
+  ADD UNIQUE KEY `event_character` (`worldboss_event_id`,`character_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables

@@ -36,6 +36,10 @@ Fields:
 - `game_currency` and `xp` — reward amounts
 - `item_id` and `sidekick_item_id` — rewarded items
 - `rewards` — serialized additional rewards
+- `claimed` — 1 if the player has claimed the reward
+
+`worldboss_reward` has a unique index on `(worldboss_event_id, character_id)` to
+ensure each player receives at most one reward per event.
 
 ### Activating an event
 
@@ -78,3 +82,14 @@ WHERE status = 1
 
 If the query returns a row, that event is active and should be loaded for
 characters whose `worldboss_event_id` matches the row's `id`.
+
+### Claiming rewards
+
+After an event ends, players can claim their rewards using the
+`claimWorldbossEventRewards` request. The request takes no parameters.
+It grants the coin, XP and item rewards stored in `worldboss_reward` and
+marks the record as claimed.
+
+Response fields:
+- `character` – updated character data
+- `worldboss_reward` – the reward record after claiming

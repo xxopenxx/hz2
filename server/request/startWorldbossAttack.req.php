@@ -18,6 +18,10 @@ class startWorldbossAttack{
         if(!$event || $event->status != 1)
             return Core::setError('errWorldbossInvalidEvent');
 
+        $now = time();
+        if($now < $event->ts_start || $now >= $event->ts_end)
+            return Core::setError('errWorldbossInvalidEvent');
+
         $attack = new WorldbossAttack([
             'worldboss_event_id'=>$event->id,
             'character_id'=>$player->character->id,

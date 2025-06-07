@@ -19,7 +19,8 @@ class WorldbossReward extends Record implements JsonSerializable {
         'xp' => 0,
         'item_id' => 0,
         'sidekick_item_id' => 0,
-        'rewards' => ''
+        'rewards' => '',
+        'claimed' => 0
     ];
 }
 
