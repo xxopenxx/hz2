@@ -30,6 +30,19 @@ class loginUser{
         $player->user->login_count++;
         
         $dailyLogin = $player->getDailyBonuses();
+        $eventData = [];
+        $rewardData = null;
+        if($player->character->worldboss_event_id){
+            $event = \Schema\WorldbossEvent::find(function($q) use ($player){
+                $q->where('id',$player->character->worldboss_event_id);
+            });
+            if($event)
+                $eventData = $event;
+            $rewardData = \Schema\WorldbossReward::find(function($q) use ($player){
+                $q->where('worldboss_event_id',$player->character->worldboss_event_id);
+                $q->where('character_id',$player->character->id);
+            });
+        }
 
         Core::req()->data = array(
             "user"=>$player->user,
@@ -68,7 +81,8 @@ class loginUser{
 			"ad_provider_keys"=>array(),
             "tournament_end_timestamp"=>0,
             "user_geo_location"=>"xX",
-            "worldboss_event_character_data"=>array()
+            "worldboss_event_character_data"=>$eventData,
+            "worldboss_reward_data"=>$rewardData
         );
         if($player->guild != null){
         	Core::req()->data['guild']= $player->guild;

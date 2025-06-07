@@ -996,6 +996,69 @@ CREATE TABLE `work` (
   `rewards` mediumtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+-- --------------------------------------------------------
+--
+-- Struktura tabeli dla tabeli `worldboss_event`
+--
+
+CREATE TABLE `worldboss_event` (
+  `id` int(11) NOT NULL,
+  `identifier` varchar(32) NOT NULL,
+  `npc_identifier` varchar(32) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 0,
+  `ts_start` int(11) NOT NULL,
+  `ts_end` int(11) NOT NULL,
+  `npc_hitpoints_total` int(11) NOT NULL,
+  `npc_hitpoints_current` int(11) NOT NULL,
+  `min_level` smallint(6) NOT NULL DEFAULT 1,
+  `max_level` smallint(6) NOT NULL DEFAULT 1,
+  `stage` tinyint(4) NOT NULL DEFAULT 1,
+  `attack_count` int(11) NOT NULL DEFAULT 0,
+  `top_attacker_character_id` int(11) NOT NULL DEFAULT 0,
+  `top_attacker_count` int(11) NOT NULL DEFAULT 0,
+  `top_attacker_name` varchar(64) NOT NULL,
+  `winning_attacker_name` varchar(64) NOT NULL,
+  `ranking` int(11) NOT NULL DEFAULT 0,
+  `coin_reward_total` int(11) NOT NULL DEFAULT 0,
+  `coin_reward_next_attack` int(11) NOT NULL DEFAULT 0,
+  `xp_reward_total` int(11) NOT NULL DEFAULT 0,
+  `xp_reward_next_attack` int(11) NOT NULL DEFAULT 0,
+  `reward_top_rank_item_identifier` varchar(64) NOT NULL,
+  `reward_top_pool_item_identifier` varchar(64) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+--
+-- Struktura tabeli dla tabeli `worldboss_attack`
+--
+
+CREATE TABLE `worldboss_attack` (
+  `id` int(11) NOT NULL,
+  `worldboss_event_id` int(11) NOT NULL,
+  `character_id` int(11) NOT NULL,
+  `battle_id` int(11) NOT NULL,
+  `damage` int(11) NOT NULL DEFAULT 0,
+  `ts_start` int(11) NOT NULL,
+  `ts_complete` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+--
+-- Struktura tabeli dla tabeli `worldboss_reward`
+--
+
+CREATE TABLE `worldboss_reward` (
+  `id` int(11) NOT NULL,
+  `worldboss_event_id` int(11) NOT NULL,
+  `character_id` int(11) NOT NULL,
+  `game_currency` int(11) NOT NULL DEFAULT 0,
+  `xp` int(11) NOT NULL DEFAULT 0,
+  `item_id` int(11) NOT NULL DEFAULT 0,
+  `sidekick_item_id` int(11) NOT NULL DEFAULT 0,
+  `rewards` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
 --
 -- Indeksy dla zrzutów tabel
 --
@@ -1215,6 +1278,27 @@ ALTER TABLE `work`
   ADD KEY `work` (`character_id`,`status`);
 
 --
+-- Indeksy dla tabeli `worldboss_event`
+--
+ALTER TABLE `worldboss_event`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `status` (`status`);
+
+--
+-- Indeksy dla tabeli `worldboss_attack`
+--
+ALTER TABLE `worldboss_attack`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_character` (`worldboss_event_id`,`character_id`);
+
+--
+-- Indeksy dla tabeli `worldboss_reward`
+--
+ALTER TABLE `worldboss_reward`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_character` (`worldboss_event_id`,`character_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1396,6 +1480,24 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `work`
 --
 ALTER TABLE `work`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `worldboss_event`
+--
+ALTER TABLE `worldboss_event`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `worldboss_attack`
+--
+ALTER TABLE `worldboss_attack`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `worldboss_reward`
+--
+ALTER TABLE `worldboss_reward`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
